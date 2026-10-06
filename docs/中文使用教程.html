@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>开麦匣 / GameVoiceBox中文使用教程</title>
+<style>
+:root { color-scheme:light; --ink:#18252c; --muted:#56656d; --accent:#12665f; --line:#d9dfe2; }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:#edf2f2; color:var(--ink); font:16px/1.85 "Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif; }
+main { max-width:1020px; margin:32px auto; padding:48px 62px; background:#fff; border:1px solid var(--line); border-radius:16px; }
+header { margin-bottom:28px; }
+.kicker { margin:0 0 8px; color:var(--accent); font-size:14px; font-weight:700; letter-spacing:.04em; }
+h1,h2,h3 { color:#000; line-height:1.45; }
+h1 { margin:0 0 12px; font-size:34px; }
+h2 { margin:36px 0 14px; font-size:24px; break-after:avoid; }
+h3 { margin:22px 0 8px; font-size:18px; break-after:avoid; }
+p { margin:10px 0; }
+.lead { font-size:18px; }
+.meta,.small { color:var(--muted); font-size:14px; }
+strong { font-weight:750; }
+a { color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px; overflow-wrap:anywhere; }
+a:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+nav { margin:24px 0; padding:18px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+nav strong { display:block; margin-bottom:6px; }
+nav ol { columns:2; column-gap:36px; margin:0; }
+nav li { break-inside:avoid; margin:2px 0; }
+ol,ul { padding-left:26px; margin:10px 0 16px; }
+li { margin:7px 0; }
+section { scroll-margin-top:24px; }
+.route { font-size:17px; font-weight:700; overflow-wrap:anywhere; }
+.table-wrap { width:100%; overflow-x:auto; margin:16px 0 20px; }
+table { width:100%; border-collapse:collapse; font-size:15px; }
+th,td { border:1px solid #d9d9d9; padding:11px 13px; vertical-align:middle; text-align:left; }
+th { background:#e9f0f1; color:#000; font-weight:750; }
+tbody tr:nth-child(even) td { background:#f7f9f9; }
+thead { display:table-header-group; }
+tr { break-inside:avoid; }
+kbd { display:inline-block; font:600 .92em/1.6 "Segoe UI",sans-serif; padding:0 6px; color:#16363c; background:#edf3f4; border:1px solid #cbd8da; border-radius:5px; white-space:nowrap; }
+.path { overflow-wrap:anywhere; font-family:"Segoe UI","Microsoft YaHei",sans-serif; }
+footer { margin-top:36px; padding-top:20px; border-top:1px solid var(--line); }
+@media(max-width:720px) { body { font-size:15px; } main { margin:0; padding:28px 22px; border:0; border-radius:0; } h1 { font-size:28px; } h2 { font-size:22px; } nav ol { columns:1; } th,td { padding:8px; } table { font-size:14px; } }
+@page { size:A4; margin:18mm 17mm; }
+@media print { html { scroll-behavior:auto; } body { background:#fff; color:#000; font-size:10.5pt; line-height:1.65; } main { max-width:none; margin:0; padding:0; border:0; border-radius:0; } h1 { font-size:24pt; } h2 { font-size:15pt; margin-top:21pt; } h3 { font-size:12pt; margin-top:14pt; } .lead { font-size:12pt; } .meta,.small { font-size:9pt; color:#333; } .kicker { font-size:9pt; color:#000; } nav { display:none; } p,li { orphans:3; widows:3; } .table-wrap { overflow:visible; } table { font-size:9.5pt; } th,td { padding:7pt 9pt; } kbd { background:transparent; border-color:#bbb; color:#000; } a { color:#000; } footer { font-size:9pt; } }
+</style>
+</head>
+<body>
+<main id="top">
+<header>
+<p class="kicker">WINDOWS 10 / 11 x64 原生一体安装版</p>
+<h1>开麦匣 / GameVoiceBox中文使用教程</h1>
+<p class="lead">把自己的麦克风和 14 段完整音效送进 VALORANT 队伍语音。先接好线路，再按住语音键播放。</p>
+<p><strong>默认不设置任何全局快捷键，包括停止键。</strong>14 条语音都能点击播放，也可以逐条自行绑定；留空表示不占用该全局键。窗口内 <kbd>Esc</kbd> 仍可停止音效。</p>
+<p class="meta">版本：1.2.0 · 教程日期：2026 年 10 月 6 日 · Win32 原生界面 · 可离线阅读 · Ctrl+P 可打印</p>
+<p><strong>Windows 实机验收尚未完成。</strong>本教程给出操作步骤，不代表已经在 Windows 上验证安装、UAC、真实设备收音、游戏前台热键或队友收音。请配合随附的<a href="Windows验收清单.txt">Windows 验收清单</a>逐项确认；云端已测内容见随附验证报告。</p>
+<p><strong>先记住：</strong>音板发送选 CABLE Input，游戏输入选 CABLE Output，听声音仍用真实耳机。每次启动后，连接、发送和试听都要自己开启。</p>
+</header>
+
+<nav aria-label="教程目录">
+<strong>第一次使用按顺序做</strong>
+<ol>
+<li><a href="#route">认清麦克风和虚拟线</a></li>
+<li><a href="#install">安装原生音板和官方驱动</a></li>
+<li><a href="#privacy">检查桌面应用麦克风权限</a></li>
+<li><a href="#devices">选择设备并连接</a></li>
+<li><a href="#valorant">配置 VALORANT 和回环测试</a></li>
+<li><a href="#controls">播放 停止 静音和音量</a></li>
+<li><a href="#hotkeys">设置可选全局快捷键</a></li>
+<li><a href="#trouble">无声 回声和设备断开</a></li>
+<li><a href="#restore">恢复真实麦克风和卸载</a></li>
+<li><a href="#sources">官方来源 许可和支持</a></li>
+</ol>
+</nav>
+
+<section id="route">
+<h2>1 认清麦克风和虚拟线</h2>
+<p class="route">真实麦克风 + 14 段音效 → CABLE Input → CABLE Output → 游戏队伍语音</p>
+<p>VB-CABLE 是 VB-Audio 的虚拟音频线。<strong>Input 是播放端，给音板写入声音；Output 是录音端，给游戏读取声音。</strong>这两个名字表示同一条线的两端。<a href="https://vb-audio.com/Cable/index.htm">VB-Audio 官方说明</a></p>
+<div class="table-wrap"><table>
+<thead><tr><th scope="col">在哪里设置</th><th scope="col">选择哪个设备</th></tr></thead>
+<tbody>
+<tr><td>音板的真实麦克风</td><td>实际说话的耳麦或 USB 麦克风</td></tr>
+<tr><td>音板的发送输出</td><td><strong>CABLE Input (VB-Audio Virtual Cable)</strong></td></tr>
+<tr><td>音板的耳机试听（仅音效）</td><td>实际戴着的耳机</td></tr>
+<tr><td>VALORANT 的语音输入</td><td><strong>CABLE Output (VB-Audio Virtual Cable)</strong></td></tr>
+<tr><td>VALORANT 的语音输出</td><td>实际戴着的耳机</td></tr>
+</tbody>
+</table></div>
+<p>设备名可能带编号，以完整名称和端点方向为准。不要把 CABLE Output 当作真实麦克风，不要把 CABLE Input 当作耳机试听（仅音效）。真实麦克风也不要选“立体声混音”或其他系统回环来源。</p>
+<p><strong>Windows 的播放输出继续使用耳机。</strong>无需把系统默认播放设备改成 CABLE Input，否则音乐、系统提示音等也可能进入虚拟线。音板不会替你修改 Windows 或游戏默认设备。</p>
+<p>耳机试听只包含音效，不能用它判断麦克风有没有被游戏收到。游戏“回环测试”能检查完整输入线路，但测试后要关闭。</p>
+</section>
+
+<section id="install">
+<h2>2 安装原生音板和官方驱动</h2>
+<h3>确认系统和交付文件</h3>
+<ol>
+<li>在“设置 → 系统 → 关于”查看系统类型，确认是 <strong>Windows 10 或 Windows 11 x64</strong>。本音板不是 32 位 Windows、Windows ARM64 或 macOS 版本。</li>
+<li>插好真实耳机和麦克风，先确认平时能正常说话和听声音，记住它们的名称。</li>
+<li>保存手头工作，关闭游戏和其他正在录音的程序。安装虚拟驱动需要管理员确认，之后需要重启。</li>
+<li>使用 <strong>GameVoiceBox-Setup-1.2.0-x64.exe</strong> 原生安装包。收到校验文件后，可在 PowerShell 用 Get-FileHash -Algorithm SHA256 检查该安装 EXE，逐字比对随附 SHA-256；校验只检查文件一致性，不能替代来源核验。</li>
+</ol>
+<p><strong>签名提示：</strong>自制音板 EXE 和一体安装包没有商业代码签名证书，Windows 可能显示“未知发布者”或 SmartScreen 提示。这不等于已验证安全，也不能凭本教程保证 Windows 会放行。先核对来源和哈希；来源不明、被组织策略阻止或安全软件明确报错时，取消并记录提示。<strong>不需要关闭防病毒、SmartScreen、驱动签名检查或其他安全保护。</strong></p>
+<p class="small">请使用仍在接收安全更新的 Windows 环境。音板的目标系统范围不代表系统本身仍有安全支持。</p>
+<h3>运行一体安装向导</h3>
+<ol>
+<li>双击原生版安装 EXE，按向导继续。音板按当前用户安装，默认放在 <span class="path">%LOCALAPPDATA%\Programs\GameVoiceBox</span>。安装后从开始菜单或桌面的“开麦匣 / GameVoiceBox”打开程序。</li>
+<li>阅读<strong>“官方虚拟声卡（可选）”</strong>页面。<strong>“启动官方 VB-CABLE 安装器（需要管理员确认）”默认不勾选。</strong>音板安装和驱动安装是两件事；只安装音板也可以先看界面和教程。</li>
+<li>如果已经有标准 VB-CABLE，先跳过驱动安装。后面确认实际存在 CABLE Input 与 CABLE Output；仅有驱动服务记录不代表音频端点可用。</li>
+<li>如果没有标准 VB-CABLE，再明确勾选启动官方安装器的选项。安装包携带标准 Pack45 的全部 31 个原样官方文件；完整源码 ZIP 另保留官方原始 <strong>VBCABLE_Driver_Pack45.zip</strong>，运行安装目录不重复存放该压缩包，启动的是官方 <span class="path">VBCABLE_Setup_x64.exe</span>，不是自制驱动。</li>
+<li>Windows 弹出 UAC 管理员确认后，由你核对来源并决定是否继续。取消 UAC 或关闭官方安装窗口，不算完成驱动安装。</li>
+<li>在官方窗口先阅读说明与许可。首次安装通常使用 <strong>Install Driver</strong>；如果显示 <strong>Remove Driver</strong>，先取消并检查已有设备，避免误卸载。按实际提示完成交互安装，不需要猜静默参数。</li>
+<li><strong>保存工作后手动重启 Windows。</strong>官方要求安装及卸载驱动后重启；音板向导不会强制重启。重启后打开音板，刷新设备并确认虚拟线两端实际出现。<a href="https://vb-audio.com/Cable/index.htm">官方安装要求</a></li>
+</ol>
+<p>以后需要安装时，可用音板里的<strong>“安装官方 VB-CABLE”</strong>按钮重新启动包内官方交互式安装器。缺少包内文件时，从<a href="https://vb-audio.com/Cable/index.htm">官方产品页</a>获取标准驱动，并按官方说明解压全部文件后以管理员方式运行 x64 安装器。不要只复制一个 Setup EXE。</p>
+<p>安装后仍没有设备：先完成重启，再刷新。官方安装器显示错误时，保留原文并查官方支持，避免连续重复安装。关闭官方窗口或安装器返回，不是音板确认驱动可用的依据。</p>
+</section>
+
+<section id="privacy">
+<h2>3 检查桌面应用麦克风权限</h2>
+<p>这是 Win32 桌面程序。连接线路、开启发送前，先确认 Windows 允许桌面应用读取真实麦克风：</p>
+<ul>
+<li><strong>Windows 11：</strong>“设置 → 隐私和安全性 → 麦克风”，检查“麦克风访问”“允许应用访问你的麦克风”和“允许桌面应用访问你的麦克风”。</li>
+<li><strong>Windows 10：</strong>“设置 → 隐私 → 麦克风”，检查此设备的麦克风访问、允许应用访问，以及“允许桌面应用访问你的麦克风”。</li>
+</ul>
+<p>名称随系统版本可能略有不同，可从开始菜单搜索“麦克风隐私设置”。桌面程序未必有单独开关；桌面应用总开关也可能影响其他程序。公司电脑若设置被管理员锁定，请联系管理员。<a href="https://support.microsoft.com/en-us/windows/privacy/turn-on-app-permissions-for-your-microphone-in-windows">微软权限说明</a></p>
+<p>修改后重新打开音板，重新选设备并连接。无需寻找浏览器网站权限或 Chromium 权限弹窗。</p>
+</section>
+
+<section id="devices">
+<h2>4 选择设备并连接</h2>
+<p><strong>每次启动都不自动连接，发送和耳机试听都关闭。</strong>设备选择、音量、静音和快捷键可以记住，但开关状态不会恢复。打开程序后先检查麦克风是否静音，再主动连接。</p>
+<ol>
+<li>点击<strong>“刷新设备”</strong>，查看当前可用的设备。USB 设备新插入、驱动重启后也先刷新。</li>
+<li>在<strong>“真实麦克风”</strong>下拉框里选实际使用的麦克风，核对完整名称；不要选 CABLE Output 或其他回环来源。</li>
+<li>在<strong>“发送到 CABLE Input”</strong>下拉框里明确选 <strong>CABLE Input (VB-Audio Virtual Cable)</strong>。发送输出不能用普通耳机代替。</li>
+<li>需要自己试听时，在<strong>“耳机试听（仅音效）”</strong>里明确选真实耳机。不要选 CABLE Input / Output。</li>
+<li>点击<strong>“连接所选设备”</strong>，等待状态显示连接成功。连接失败、权限被拒绝或设备格式不支持时，按状态提示排查，保持发送关闭。</li>
+<li>先把音效音量调低，戴上耳机。需要自己听音效时，勾选<strong>“耳机试听”</strong>并点击“卡了”试一次。<strong>试听只放音效，不放麦克风。</strong></li>
+<li>准备把声音交给游戏时，勾选<strong>“开启发送”</strong>。确认状态实际显示发送已开启，再继续下一节配置游戏。</li>
+</ol>
+<p>同名设备会附上稳定的设备编号，刷新顺序改变不会让已选设备改指向另一台。点击<strong>“设备详情”</strong>可查看完整名称和端点 ID；详情可横向/纵向滚动并复制，长名称不必靠下拉框截断内容猜测。线路身份根据驱动/适配器信息核对，修改显示名不会把 CABLE Output 变成真实麦克风；无法核对身份的设备会被拒绝。</p>
+<p>界面在小屏幕或高 DPI 下可纵向滚动，Tab 导航会把获得焦点的控件滚入可见区域。正在打开发送或试听时再次点击相应开关会取消本次打开；勾选及状态文本以后台实际确认结果为准。</p>
+<p><strong>连接不等于发送。</strong>发送开启后，音板会把真实麦克风和当前音效写入虚拟线；是否传给队友还取决于游戏的输入设备和按键说话。发送关闭时，不再向虚拟线送声音。</p>
+<p>只想自己试听，可以独立选择真实耳机并勾选<strong>“耳机试听”</strong>，无需先打开发送。试听始终只包含音效。</p>
+<p>没有开启任何输出时，点击音效不会留在队列里等待下一次连接；以后打开发送或试听时，请重新触发需要的音效。</p>
+<p>程序按你选定的设备端点连接，不会在设备失效时悄悄改用 Windows 默认麦克风或默认耳机。换设备后重新连接并检查开关状态，不要只看下拉框以为线路已经可用。</p>
+</section>
+
+<section id="valorant">
+<h2>5 配置 VALORANT 和回环测试</h2>
+<h3>选好输入和输出</h3>
+<ol>
+<li>打开游戏“设置 → 音频 → 语音聊天”（Settings → Audio → Voice Chat）。</li>
+<li><strong>输入设备 / Input Device：</strong>明确选 <strong>CABLE Output (VB-Audio Virtual Cable)</strong>，不要依赖默认设备。</li>
+<li><strong>输出设备 / Output Device：</strong>选真实耳机。游戏和队友声音继续从耳机播放。</li>
+<li>打开“队伍语音聊天 / Team Voice Chat”，检查队伍按键说话的实际绑定。默认是 <kbd>V</kbd>；改过就用自己的键。</li>
+</ol>
+<p><strong>先自行绑定需要的播放键，再在游戏前台按住 V、触发该键，等完整音效结束后再松开 V。</strong>默认没有播放或停止的全局键。也可在音板窗口点击播放，但切换窗口可能影响游戏的按键说话，应另外实测。音板不注入按键，也不会替你按住 V。队伍语音的默认键和按键说话规则见<a href="https://support.riotgames.com/en-us/valorant/gameplay/valorant-voice-chat-troubleshooting">Riot 官方语音说明</a>。</p>
+<h3>第一次先检查完整线路</h3>
+<ol>
+<li>戴上耳机，暂时关闭音板的<strong>耳机试听</strong>，避免同时听到两份音效。确认音板发送已开启。</li>
+<li>在游戏语音设置打开 <strong>Loopback Test / 回环测试</strong>。正常说一句话，应听到自己的声音。</li>
+<li>逐一点击 14 条音效并完整听完，名称和时长见下一节。需要调整时，一次只改音效或麦克风的一个音量。</li>
+<li><strong>测试完立即关闭 Loopback Test。</strong>正常使用时不要长期打开；之后如需自听音效，再打开音板耳机试听。</li>
+<li>找愿意配合的队友做一次短测试：保持游戏在前台，按住 V 说话，再按一次播放键，确认对方听到完整音效、正常麦克风和没有回声。</li>
+</ol>
+<p>回环是本地检查；回环能听到，不保证队伍语音已经通畅。前台热键和实际队友收音都需要另外确认。游戏更新后的名称或界面位置可能略有变化，以实际设置为准。</p>
+</section>
+
+<section id="controls">
+<h2>6 播放 停止 静音和音量</h2>
+<div class="table-wrap"><table>
+<thead><tr><th scope="col">音效或操作</th><th scope="col">默认全局键</th><th scope="col">完整播放时长 / 作用</th></tr></thead>
+<tbody>
+<tr><td><strong>操操操</strong></td><td>未设置（可选）</td><td>约 1.70 秒</td></tr>
+<tr><td><strong>卡了</strong></td><td>未设置（可选）</td><td>约 0.78 秒</td></tr>
+<tr><td><strong>vamos!</strong></td><td>未设置（可选）</td><td>约 2.59 秒</td></tr>
+<tr><td><strong>加纳</strong></td><td>未设置（可选）</td><td>约 9.22 秒</td></tr>
+<tr><td><strong>卡键</strong></td><td>未设置（可选）</td><td>约 0.72 秒</td></tr>
+<tr><td><strong>吞子弹了</strong></td><td>未设置（可选）</td><td>约 1.00 秒</td></tr>
+<tr><td><strong>呀嘞呀嘞</strong></td><td>未设置（可选）</td><td>约 1.42 秒</td></tr>
+<tr><td><strong>呀嘞呀嘞（缓慢版）</strong></td><td>未设置（可选）</td><td>约 1.70 秒</td></tr>
+<tr><td><strong>宽带</strong></td><td>未设置（可选）</td><td>约 2.04 秒</td></tr>
+<tr><td><strong>椅子</strong></td><td>未设置（可选）</td><td>约 2.18 秒</td></tr>
+<tr><td><strong>没办法</strong></td><td>未设置（可选）</td><td>约 5.06 秒</td></tr>
+<tr><td><strong>看小地图去了</strong></td><td>未设置（可选）</td><td>约 1.65 秒</td></tr>
+<tr><td><strong>设置</strong></td><td>未设置（可选）</td><td>约 1.09 秒</td></tr>
+<tr><td><strong>资本</strong></td><td>未设置（可选）</td><td>约 1.16 秒</td></tr>
+<tr><td>停止音效</td><td>未设置（可选）</td><td>点击“停止音效”或自行绑定停止键；保留正常麦克风发送</td></tr>
+<tr><td>窗口内停止</td><td>无需全局绑定</td><td><kbd>Esc</kbd>，仅音板窗口获得焦点时生效</td></tr>
+</tbody></table></div>
+<p>14 条音效在可滚动列表中逐条显示，均可点击播放。<strong>一次只播放一段：</strong>触发另一段会替换当前音效，重复触发同一段会从头再播；不循环、不把多段叠在一起。按住播放键不会靠键盘自动重复连续播放。</p>
+<p>运行时使用完整第一音轨解码的 48 kHz、双声道、PCM16 WAV。原始文件仅保留在源代码包 assets/original，安装器只携带运行 WAV 和校验元数据。8 个原文件虽然扩展名是 MP3，实际是含 AAC 音轨的 MP4/M4A；其中 4 个还含视频，视频不会进入运行文件。表中时长按实际 PCM 帧数计算，未裁剪或修改播放速度；停止时已经送进音频设备缓冲的极短尾声，可能不会在按键瞬间消失。</p>
+<h3>分别控制麦克风和音效</h3>
+<ul>
+<li><strong>音效音量：</strong>影响虚拟线里的音效，也影响耳机试听。先调低，避免音效盖过说话声。</li>
+<li><strong>麦克风音量：</strong>只影响真实麦克风进入虚拟线的音量。正常说话清楚即可；过响或失真时，适当降低输入设备或音板音量。</li>
+<li><strong>麦克风静音：</strong>只把麦克风从混音里静音，音效仍可发送。取消静音恢复原先麦克风音量，不需要把滑块重新拉回。</li>
+<li><strong>关闭发送：</strong>同时停止麦克风和音效进入虚拟线，并清空该发送流；耳机试听可以继续。要关闭所有音板声音，也把试听关掉。</li>
+</ul>
+<p>“停止音效”不是“关麦”；“麦克风静音”也不是“停止音效”。游戏在前台时，先自行绑定全局停止键，再用该键停止音效；游戏自己的 Esc 不受音板窗口内快捷键影响。</p>
+<p><strong>原生版不额外实现 Chromium 的回声消除或降噪。</strong>Windows 或设备已有的麦克风处理仍可能生效。建议戴耳机，关闭 Windows“侦听此设备”和正常使用时的游戏回环；不要用外放扬声器把音效再录回麦克风。</p>
+</section>
+
+<section id="hotkeys">
+<h2>7 设置可选全局快捷键</h2>
+<p><strong>默认不设置 14 条播放键，也不设置全局停止键。</strong>所有输入框可留空；留空表示不注册、不占用该全局键。没有全局绑定时，用列表按钮播放、“停止音效”按钮停止，或在音板窗口按 Esc 停止。</p>
+<ol>
+<li>滚动到需要的音效，在对应输入框填组合，例如 <strong>Ctrl+Alt+1</strong> 或 <strong>Shift+F8</strong>。只给常用音效绑定即可，其余保持空白。</li>
+<li>需要在游戏前台随时停止时，另填可选的<strong>停止音效快捷键</strong>，例如 Ctrl+Shift+S。停止键和各播放键都可编辑或清空。</li>
+<li>每个组合用一个主键，可搭配 Ctrl、Alt、Shift；主键可用单个英文字母、数字或 F1–F24（F12 除外）。所有非空组合必须彼此不同，播放键也不能与停止键重复。</li>
+<li>点击<strong>“保存全局快捷键”</strong>，看实际注册状态和保存提示。Windows 已占用的组合、重复或无效格式会报错；失败后程序尝试恢复旧键。</li>
+<li>确认自己设置的非空键显示已注册，再到游戏前台分别测试。空白键显示未绑定是正常情况；有文字但未注册时，不能用它触发。清空并保存后，旧全局键应被注销。</li>
+</ol>
+<p><strong>F12 不能使用：</strong>Windows 将它保留给调试器，含 F12 的组合也会被拒绝。<strong>不带修饰键的 Esc/Escape 也会被拒绝</strong>，保留给音板窗口内停止，避免占用游戏自己的 Esc。优先使用 Ctrl / Alt / Shift 组合。<a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerhotkey">微软全局热键规则</a></p>
+<p>其他音板、语音软件、录屏工具或游戏绑定都可能冲突。先改用没有冲突的组合，再测试。不要把播放键改成 V，以免与队伍按键说话混在一起。</p>
+<p>“注册成功”表示 Windows 接受了全局键，还需确认当前游戏前台能收到对应触发。无需关闭反作弊或降低安全设置，也不要用键盘注入绕过游戏限制。</p>
+<p>若设置写入失败，记录原文，不要把当前可用状态当作已永久保存。下次启动后重新核对设备、音量和实际热键状态；设置文件损坏恢复默认后，全部全局键再次为空。</p>
+</section>
+
+<section id="trouble">
+<h2>8 无声 回声和设备断开</h2>
+<h3>耳机听到音效 但游戏或队友听不到</h3>
+<ol>
+<li>耳机试听只证明试听线路。检查“开启发送”是否真的开启，线路状态是否有错误。</li>
+<li>重新核对：音板发送为 CABLE Input，游戏输入为 CABLE Output，游戏输出为真实耳机。</li>
+<li>先做游戏回环。回环正常后，确认队伍语音已启用，并在真实测试时按住 V 到整段播放结束。</li>
+<li>回环正常但队友仍听不到，查看游戏语音状态和当前账号/地区的语音可用性，按 Riot 官方支持排查；不要从此推断音板已通过队友收音验收。</li>
+</ol>
+<h3>音效正常 但自己的说话没有声音</h3>
+<ol>
+<li>检查音板“麦克风静音”、麦克风音量、耳麦物理静音键和 Windows 输入音量。</li>
+<li>核对真实麦克风名称，检查桌面应用麦克风权限。用 Windows 声音设置观察说话时输入电平。</li>
+<li>退出其他占用麦克风的软件，重新连接线路。权限、设备格式或占用错误时，保留音板显示的原文。</li>
+</ol>
+<h3>只有说话 没有音效</h3>
+<p>先点击窗口中的“卡了”，确认音效音量不为零且发送开启。按钮有效、热键无效时，检查注册状态、组合冲突和游戏前台测试；默认没有全局键，要先绑定并保存；笔记本的功能键可能需要 Fn 配合，也可改用 Ctrl+Alt+数字。</p>
+<h3>出现两份声音 回声或啸叫</h3>
+<ol>
+<li>游戏回环开启时，关闭音板耳机试听；完成回环后把游戏回环也关闭。</li>
+<li>在 Windows“更多声音设置 / 声音控制面板 → 录制 → 设备属性 → 侦听”中，确认相关设备没有勾选“侦听此设备”。不要用它额外连接虚拟线。</li>
+<li>确认真实麦克风没有选到 CABLE Output。戴耳机并关闭外放，降低音量后再试。</li>
+</ol>
+<h3>USB 拔出 驱动重启或默认设备改变</h3>
+<ol>
+<li>选定的麦克风或发送端失效时，程序应关闭相关发送并提示错误；试听设备失效应关闭试听。看实际状态，暂时不要继续触发。</li>
+<li>重新插好设备，点击“刷新设备”，重新选择确切的麦克风、CABLE Input 和真实耳机。</li>
+<li>重新连接，确认成功，再主动打开发送或试听。<strong>插回后不应自动恢复外发声音。</strong></li>
+<li>只修改 Windows 默认设备时，音板应继续指向原先明确选定的端点。要用另一设备，必须自己选择并重新连接；不会静默改路由。</li>
+</ol>
+<p>列表里名称相似或重复时，先确认哪个是实际设备；可逐个查看 Windows 声音设备信息。不确定时保持发送关闭。遇到不支持的设备格式时，程序应拒绝连接并报错；不要随意修改其他程序的全局音频设置。</p>
+<h3>持续使用后延迟增加 或声音断续</h3>
+<p>先停止测试，记录使用多久、各设备名称、是否更改了采样率或重新插拔，以及状态错误。关闭发送后重新连接可作排查。云端的时钟漂移模拟不能代替真实硬件长时间测试；请在验收清单记录实机表现。</p>
+</section>
+
+<section id="restore">
+<h2>9 恢复真实麦克风和卸载</h2>
+<h3>不用音板时恢复正常语音</h3>
+<ol>
+<li>关闭发送和耳机试听，退出音板。退出会释放程序持有的麦克风与音频流。</li>
+<li>在 VALORANT“设置 → 音频 → 语音聊天”把<strong>输入设备手动改回真实麦克风</strong>，输出继续用真实耳机。</li>
+<li>按住队伍语音键说一句话，确认普通语音恢复。如果其他语音软件也选了 CABLE Output，同样手动改回。</li>
+</ol>
+<p><strong>退出音板不会自动改回游戏输入。</strong>如果游戏仍选 CABLE Output，而音板已经关闭，游戏通常就没有这条线路的输入。音板也不会替你恢复或修改 Windows 默认设备。</p>
+<h3>卸载音板</h3>
+<p>先退出，再从 Windows“设置 → 应用”找到“开麦匣 / GameVoiceBox”运行卸载，或运行安装目录内的卸载程序。</p>
+<p>卸载只删除清单内的音板文件，<strong>不会自动卸载已安装的共享 VB-CABLE 驱动</strong>；会保留用户设置和自行添加的文件。原生版设置保存在 <span class="path">%APPDATA%\GameVoiceBox\settings.ini</span>。保留设置是正常行为。</p>
+<p>确定其他软件也不再需要 VB-CABLE 时，才自行按<a href="https://vb-audio.com/Cable/index.htm">官方说明</a>用官方安装器卸载驱动，并按要求重启。不要为解决一个音板问题就随意移除共享驱动。</p>
+</section>
+
+<section id="sources">
+<h2>10 官方来源 许可和支持</h2>
+<p><strong>标准 VB-CABLE 由 VB-Audio 开发，是 Donationware。</strong>可先安装测试；觉得有用或进行专业使用时，应按作者说明捐赠或支付适用许可。机构、组织或专业用途须遵守官方许可要求。这份个人自用音板只携带标准 Pack45，不含 VB-CABLE A+B / C+D。<a href="https://vb-audio.com/Services/licensing.htm">官方许可与分发说明</a></p>
+<p>当前官网允许在来源、Donationware 模式和付费入口对最终用户明确可见的条件下，随应用分发标准 VB-CABLE；其他附加虚拟线不适用。包内保留官方 readme 和完整原文件，安装前请阅读。readme 的较早分发措辞与现行官网可能不同，具体许可解释以官方当前说明及作者答复为准。<a href="https://vb-audio.com/Services/licensing.htm">现行分发条款</a></p>
+<p>安装和使用 VB-CABLE 须遵守官方许可；是否捐赠及购买何种许可，由你查看条款后决定。标准 Pack45 的全部 31 个官方文件保持字节不变，官方原始 ZIP 保留于完整源码包，自制音板的未签名状态不会替代官方驱动自身的签名和许可。</p>
+<p>语音素材权利仍归原权利人；提供源码或安装包不授予素材的改作、商用或再分发许可。项目源码尚未指定开源许可证，授权边界见随附 LICENSE.md 和 THIRD_PARTY_NOTICES.md。</p>
+<ul>
+<li><a href="https://vb-audio.com/Cable/index.htm">VB-CABLE 官方产品页和安装说明</a></li>
+<li><a href="https://vb-audio.com/Services/licensing.htm">VB-Audio 许可和捐赠入口</a></li>
+<li><a href="https://shop.vb-audio.com/en/">VB-Audio 官方商店和许可购买</a> · <a href="https://forum.vb-audio.com/">官方支持论坛</a></li>
+<li><a href="https://support.microsoft.com/en-us/windows/privacy/turn-on-app-permissions-for-your-microphone-in-windows">微软麦克风权限说明</a></li>
+<li><a href="https://support.riotgames.com/en-us/valorant/gameplay/valorant-voice-chat-troubleshooting">Riot VALORANT 语音排查说明</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerhotkey">微软 RegisterHotKey 和 F12 保留规则</a></li>
+</ul>
+<p class="small">本教程中的设备与游戏标签用于定位实际控件；没有虚构 Windows 截图或实机测试结果。外部页面需联网，离线时仍可阅读全部操作步骤。官方网页内容和产品界面可能更新，以官方当前说明及实际显示为准。</p>
+</section>
+<footer>
+<p><strong>每次开游戏前：</strong>选对麦克风 → 连接成功 → 确认发送开启 → 游戏输入 CABLE Output → 按住 V 再播放。</p>
+<p class="small"><a href="#top">回到顶部</a> · <a href="Windows验收清单.txt">打开 Windows 验收清单</a></p>
+</footer>
+</main>
+</body>
+</html>

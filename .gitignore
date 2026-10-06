@@ -1,0 +1,10 @@
+/build/
+/dist/
+/vendor/official/
+/vendor/VBCABLE_Driver_Pack45.zip
+**/__pycache__/
+*.pyc
+/tools/
+/cache/
+/docs/superpowers/
+/docs/implementation-ledger.md

@@ -1,0 +1,51 @@
+{
+  "source": "https://deb.debian.org/debian trixie main",
+  "acquisition": "APT InRelease repository verification then apt-get download; unmodified Debian packages extracted into project external tool directory",
+  "packages": [
+    {
+      "file": "7zip_25.01+dfsg-1~deb13u2_amd64.deb",
+      "package": "Package: 7zip\nVersion: 25.01+dfsg-1~deb13u2",
+      "sha256": "b2cb210bee3be6a10230b38b8645d71846d19364b157f44fd08e1a54cae1652f"
+    },
+    {
+      "file": "binutils-mingw-w64-x86-64_2.44-3+12+b1_amd64.deb",
+      "package": "Package: binutils-mingw-w64-x86-64\nVersion: 2.44-3+12+b1",
+      "sha256": "b53f4a091b16a0d0952b8e3bd6027931641386258f96b37db1f0c62c787221d3"
+    },
+    {
+      "file": "gcc-mingw-w64-base_14.2.0-19+27+b1_amd64.deb",
+      "package": "Package: gcc-mingw-w64-base\nVersion: 14.2.0-19+27+b1",
+      "sha256": "8d2c64b886ab4a435a78ddc4cd3b510f149b65fbd6be8472e8f460627562718a"
+    },
+    {
+      "file": "gcc-mingw-w64-x86-64-win32-runtime_14.2.0-19+27+b1_amd64.deb",
+      "package": "Package: gcc-mingw-w64-x86-64-win32-runtime\nVersion: 14.2.0-19+27+b1",
+      "sha256": "73a27ee935bec4c81331c3e92c2399e11f161e75fe27898524dcf2bae77f97cb"
+    },
+    {
+      "file": "gcc-mingw-w64-x86-64-win32_14.2.0-19+27+b1_amd64.deb",
+      "package": "Package: gcc-mingw-w64-x86-64-win32\nVersion: 14.2.0-19+27+b1",
+      "sha256": "a4d7abc5c9c97380eeac348d3b94d522a04e80028bb825cd44df09d9ba90092f"
+    },
+    {
+      "file": "mingw-w64-common_12.0.0-5_all.deb",
+      "package": "Package: mingw-w64-common\nVersion: 12.0.0-5",
+      "sha256": "97dce5d0d8aff1cade4786ad4ef5078345477a598829afcac2e7f2fbc5399990"
+    },
+    {
+      "file": "mingw-w64-x86-64-dev_12.0.0-5_all.deb",
+      "package": "Package: mingw-w64-x86-64-dev\nVersion: 12.0.0-5",
+      "sha256": "0bf89cf7454cccb49cd2a46a6f7b33896f6ae3a1a2fe33e02c40be6155bbb385"
+    },
+    {
+      "file": "nsis-common_3.11-1_all.deb",
+      "package": "Package: nsis-common\nVersion: 3.11-1",
+      "sha256": "103a3284c1a5356efa0aba90fdfc391c3cde8e7df8726377cef0f98471584047"
+    },
+    {
+      "file": "nsis_3.11-1_amd64.deb",
+      "package": "Package: nsis\nVersion: 3.11-1",
+      "sha256": "e6eb6ffb70f0df09e95dedb2d2cf55ad3c2679f7c2ae357d0c00cc4c83178690"
+    }
+  ]
+}
