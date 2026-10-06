@@ -46,7 +46,7 @@ test-package:
 source:
 	python3 scripts/package_source.py
 clean:
-	rm -rf build/objects build/tests build/package-extract dist/GameVoiceBox.exe dist/GameVoiceBox-Setup-1.2.0-x64.exe
+	rm -rf build/objects build/tests build/package-extract dist/GameVoiceBox.exe dist/GameVoiceBox-Setup-1.2.1-x64.exe
 
 fetch-vendor:
 	python3 scripts/fetch_vendor.py
@@ -55,3 +55,23 @@ test-build-contract:
 
 test-delivery-report:
 	python3 -m unittest discover -s tests -p test_delivery_report.py
+
+.PHONY: test-tray
+test: test-tray
+test-tray:
+	python3 -m unittest discover -s tests -p test_tray.py
+
+.PHONY: test-guide-update
+test: test-guide-update
+test-guide-update:
+	python3 -m unittest discover -s tests -p test_guide_update.py
+
+.PHONY: test-installer-upgrade
+test: test-installer-upgrade
+test-installer-upgrade:
+	python3 -m unittest discover -s tests -p test_installer_upgrade.py
+
+.PHONY: test-hotkey-diagnostics
+test: test-hotkey-diagnostics
+test-hotkey-diagnostics:
+	python3 -m unittest discover -s tests -p test_hotkey_diagnostics.py

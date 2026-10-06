@@ -1,8 +1,10 @@
 #include "ui.h"
+#include "tray.h"
 #include "ui_contract.h"
 #include "devices.h"
 #include "wasapi.h"
 #include "status_contract.h"
+#include "hotkey_diagnostics.h"
 #include <commctrl.h>
 #include <shellapi.h>
 #include <shlobj.h>
@@ -18,6 +20,7 @@
 
 typedef struct Ui {
     HWND hwnd;
+    TrayWindow tray;
     HWND controls[UI_STATUS+1];
     HWND labels[LABEL_COUNT];
     HWND clip_status[CLIP_COUNT];
@@ -30,6 +33,7 @@ typedef struct Ui {
     AudioWorker worker;
     Controller controller;
     HotkeyStatus hotkeys;
+    HotkeyDiagnostics hotkey_diagnostics;
     bool closing,initialized,initializing;
     CRITICAL_SECTION status_lock;
     AudioStatusMailbox mailbox;
@@ -179,7 +183,7 @@ static void fonts(Ui *u) {
     if(old_big) DeleteObject(old_big);
 }
 void ui_apply_state(HWND hwnd,const ControllerState *state,const HotkeyStatus *keys) {
-    Ui *u=get_ui(hwnd); wchar_t text[4096],one[180],stop_text[180]; int i,assigned=0,registered=0; wchar_t *error,*notice_text,*stop_name;
+    Ui *u=get_ui(hwnd); wchar_t text[4096],one[180],stop_text[180]; char diagnostic[1536]; int i,assigned=0,registered=0; wchar_t *error,*notice_text,*stop_name,*diagnostic_text;
     if(!u || !u->controls[UI_STATUS]) return;
     SendMessageW(u->controls[UI_SEND],BM_SETCHECK,ui_effective_enabled(state->sending,u->last_backend.sending,state->routing_generation==u->last_backend.routing_generation)?BST_CHECKED:BST_UNCHECKED,0);
     SendMessageW(u->controls[UI_MONITOR],BM_SETCHECK,ui_effective_enabled(state->monitoring,u->last_backend.monitoring,state->monitor_generation==u->last_backend.monitor_generation)?BST_CHECKED:BST_UNCHECKED,0);
@@ -203,11 +207,25 @@ void ui_apply_state(HWND hwnd,const ControllerState *state,const HotkeyStatus *k
     if(!u->settings.hotkeys[HOTKEY_STOP_INDEX].key && !keys->registered[HOTKEY_STOP_INDEX]) swprintf(stop_text,sizeof(stop_text)/sizeof(stop_text[0]),L"停止全局快捷键：未设置");
     else swprintf(stop_text,sizeof(stop_text)/sizeof(stop_text[0]),L"停止全局快捷键：%ls（%ls）",stop_name?stop_name:L"",keys->registered[HOTKEY_STOP_INDEX]?L"已注册":L"未注册");
     free(stop_name);
+    hotkey_diagnostics_format(&u->hotkey_diagnostics,diagnostic,sizeof diagnostic); diagnostic_text=win_utf8_to_wide(diagnostic);
     error=win_utf8_to_wide(state->last_error); notice_text=win_utf8_to_wide(u->notice);
-    swprintf(text,sizeof(text)/sizeof(text[0]),L"连接：%ls  发送：%ls  试听：%ls；全局快捷键 %d/%d 已注册\r\n%ls；Esc 仅本窗口停止音效\r\n%ls%ls%ls",state->ready?L"就绪":L"未连接",ui_effective_enabled(state->sending,u->last_backend.sending,state->routing_generation==u->last_backend.routing_generation)?L"开启":state->sending?L"开启中（再点取消）":L"关闭",ui_effective_enabled(state->monitoring,u->last_backend.monitoring,state->monitor_generation==u->last_backend.monitor_generation)?L"开启":state->monitoring?L"开启中（再点取消）":L"关闭",registered,assigned,stop_text,notice_text?notice_text:L"",u->notice[0] && error && error[0]?L"\r\n":L"",error?error:L"");
-    SetWindowTextW(u->controls[UI_STATUS],text); free(error); free(notice_text);
+    swprintf(text,sizeof(text)/sizeof(text[0]),L"连接：%ls  发送：%ls  试听：%ls；全局快捷键 %d/%d 已注册\r\n%ls；Esc 仅本窗口停止音效\r\n%ls\r\n%ls%ls%ls",state->ready?L"就绪":L"未连接",ui_effective_enabled(state->sending,u->last_backend.sending,state->routing_generation==u->last_backend.routing_generation)?L"开启":state->sending?L"开启中（再点取消）":L"关闭",ui_effective_enabled(state->monitoring,u->last_backend.monitoring,state->monitor_generation==u->last_backend.monitor_generation)?L"开启":state->monitoring?L"开启中（再点取消）":L"关闭",registered,assigned,stop_text,diagnostic_text?diagnostic_text:L"",notice_text?notice_text:L"",u->notice[0] && error && error[0]?L"\r\n":L"",error?error:L"");
+    SetWindowTextW(u->controls[UI_STATUS],text); free(error); free(notice_text); free(diagnostic_text);
     swprintf(one,sizeof(one)/sizeof(one[0]),L"音效音量 %d%%",u->settings.sound_gain); SetWindowTextW(u->labels[3],one);
     swprintf(one,sizeof(one)/sizeof(one[0]),L"麦克风音量 %d%%",u->settings.mic_gain); SetWindowTextW(u->labels[4],one);
+}
+static const Hotkey *diagnostic_key(Ui *u,int id,Hotkey *stop) {
+    (void)stop;
+    if(id==HOTKEY_STOP_ID) return u->hotkeys.registered[HOTKEY_STOP_INDEX]?&u->hotkeys.keys[HOTKEY_STOP_INDEX]:NULL;
+    if(id>=HOTKEY_ID_BASE && id<HOTKEY_STOP_ID) return u->hotkeys.registered[id-HOTKEY_ID_BASE]?&u->hotkeys.keys[id-HOTKEY_ID_BASE]:NULL;
+    return NULL;
+}
+void ui_hotkey_queue_received(HWND hwnd,int id) {
+    Ui *u=get_ui(hwnd); Hotkey stop; const Hotkey *key; SYSTEMTIME now;
+    if(!u || u->closing) return;
+    key=diagnostic_key(u,id,&stop); if(!key) return;
+    GetLocalTime(&now);
+    if(hotkey_diagnostics_queue(&u->hotkey_diagnostics,id,key,true,now.wHour,now.wMinute,now.wSecond)) ui_apply_state(hwnd,&u->controller.state,&u->hotkeys);
 }
 static bool device_present(Ui *u,const char *id) { size_t i; for(i=0;i<u->devices.count;++i) if(!strcmp(u->devices.items[i].id,id)) return true; return false; }
 static void fill_combo(Ui *u,int control_id,EndpointRole role,const char *selected) {
@@ -380,6 +398,7 @@ static void control_action(Ui *u,int id) {
 }
 static void cleanup(Ui *u) {
     int i; char error[256];
+    tray_window_remove(&u->tray);
     KillTimer(u->hwnd,SETTINGS_TIMER);
     for(i=0;i<HOTKEY_COUNT;++i) if(u->hotkeys.registered[i]) { if(unreg_key(u,HOTKEY_ID_BASE+i,error)) u->hotkeys.registered[i]=false; }
     audio_worker_shutdown(&u->worker);
@@ -398,6 +417,15 @@ void ui_focus_visible(HWND hwnd) {
 }
 LRESULT CALLBACK main_window_proc(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp) {
     Ui *u=get_ui(hwnd);
+    /* A failed-save modal dialog pumps messages while closing. Keep Explorer
+       invalidation/recovery alive so canceling exit cannot leave a stale icon. */
+    if(u && (!u->closing || msg==u->tray.taskbar_created)) {
+        bool recovery_failed=false;
+        if(tray_window_message(&u->tray,msg,wp,lp,&recovery_failed)) {
+            if(recovery_failed) notice(u,L"托盘图标恢复失败；窗口已保留。请从窗口操作或退出后重试");
+            return 0;
+        }
+    }
     switch(msg) {
     case WM_CREATE: {
         char error[256]; Hotkey defaults[HOTKEY_COUNT]; HotkeyOps ops; BackendOps backend; Command gains={0};
@@ -411,8 +439,10 @@ LRESULT CALLBACK main_window_proc(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp) {
         hotkey_defaults(defaults); ops=(HotkeyOps){u,reg_key,unreg_key,NULL};
         if(!hotkeys_replace(&ops,defaults,u->settings.hotkeys,&u->hotkeys)) show_error(u,u->hotkeys.error);
         refresh_devices(u); u->initialized=true; u->initializing=false;
+        if(!tray_window_init(&u->tray,hwnd,L"开麦匣 GameVoiceBox")) notice(u,L"托盘图标创建失败；窗口保持可见，最小化时会重试");
         ui_apply_state(hwnd,&u->controller.state,&u->hotkeys); return 0;
     }
+    case WM_APP_RESTORE: if(u && !u->closing) tray_window_restore(&u->tray); return 0;
     case WM_AUDIO_STATUS:
         if(u) {
             ControllerState state;
@@ -430,11 +460,17 @@ LRESULT CALLBACK main_window_proc(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp) {
     case WM_HSCROLL: if(u && !u->closing && !u->initializing) update_gains(u); return 0;
     case WM_HOTKEY:
         if(u && !u->closing) {
-            Command cmd={0};
+            Command cmd={0}; Hotkey stop; const Hotkey *key; SYSTEMTIME now; bool observed,accepted;
             if(wp==HOTKEY_STOP_ID) cmd.kind=COMMAND_STOP;
             else if(wp>=HOTKEY_ID_BASE && wp<HOTKEY_ID_BASE+CLIP_COUNT) { cmd.kind=COMMAND_PLAY; cmd.clip_index=(int)wp-HOTKEY_ID_BASE; }
             else return 0;
-            dispatch(u,&cmd);
+            key=diagnostic_key(u,(int)wp,&stop); GetLocalTime(&now);
+            observed=hotkey_diagnostics_handled(&u->hotkey_diagnostics,(int)wp,key,key!=NULL,now.wHour,now.wMinute,now.wSecond);
+            accepted=dispatch(u,&cmd);
+            if(observed) {
+                hotkey_diagnostics_result(&u->hotkey_diagnostics,(int)wp,accepted,accepted?NULL:u->controller.state.last_error);
+                ui_apply_state(hwnd,&u->controller.state,&u->hotkeys);
+            }
         }
         return 0;
     case WM_KEYDOWN:
@@ -460,7 +496,13 @@ LRESULT CALLBACK main_window_proc(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp) {
     case WM_MOUSEWHEEL:
         if(u) { u->scroll-=GET_WHEEL_DELTA_WPARAM(wp)/WHEEL_DELTA*72; layout(u); }
         return 0;
-    case WM_SIZE: if(u) layout(u); return 0;
+    case WM_SIZE:
+        if(u && !u->closing && !u->initializing) {
+            if(wp==SIZE_MINIMIZED) {
+                if(!tray_window_minimize(&u->tray)) notice(u,L"托盘图标不可用；已恢复窗口，避免程序隐藏后无法找回");
+            } else { u->tray.state.hidden=false; layout(u); }
+        }
+        return 0;
     case WM_GETMINMAXINFO:
         if(u) {
             MINMAXINFO *info=(MINMAXINFO *)lp; MONITORINFO monitor={0}; monitor.cbSize=sizeof(monitor);

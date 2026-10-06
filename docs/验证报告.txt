@@ -1,4 +1,4 @@
-开麦匣 / GameVoiceBox 1.2.0：云端验证范围说明
+开麦匣 / GameVoiceBox 1.2.1：云端验证范围说明
 日期：2026-10-06
 
 产品范围
@@ -49,3 +49,5 @@ ASAN/UBSAN 用于检查内存访问及未定义行为。当前受跟踪云端环
 VB-CABLE 来源、Donationware、许可和捐赠：https://vb-audio.com/Cable/index.htm；https://vb-audio.com/Services/licensing.htm；https://shop.vb-audio.com/en/。
 
 安装包体积优化：运行安装目录保留全部 31 个原样官方文件；官方原始 ZIP 留在完整源码 ZIP，不重复装入运行目录。不改变可选官方安装器路径或驱动功能。
+
+本次更新：托盘生命周期、当前用户桌面快捷方式创建检查、同系列登记路径升级与运行进程保护。连接设备后需主动勾选耳机试听或开启发送。纯C生命周期测试只证明先添加图标后隐藏、添加/恢复失败保持窗口可见、Explorer重建状态、恢复与清理策略；真实图标、快捷方式、同路径升级与卸载仍待Windows实机验证。

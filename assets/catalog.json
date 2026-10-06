@@ -3,7 +3,7 @@
   "product": {
     "name": "开麦匣",
     "english_name": "GameVoiceBox",
-    "version": "1.2.0"
+    "version": "1.2.1"
   },
   "default_stop_hotkey": "",
   "runtime_format": {

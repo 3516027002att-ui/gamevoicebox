@@ -116,6 +116,7 @@ bool ui_layout_compute(int width,UiLayout *out) {
         int safe_height=available>=600?24:48;
         rect_set(&out->labels[6],margin,y,available,safe_height); y+=safe_height+12;
     }
-    rect_set(&out->controls[UI_STATUS],margin,y,available,150); out->content_height=y+160;
+    int status_height=width>=700?240:320;
+    rect_set(&out->controls[UI_STATUS],margin,y,available,status_height); out->content_height=y+status_height+10;
     return true;
 }

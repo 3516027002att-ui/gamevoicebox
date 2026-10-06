@@ -6,22 +6,22 @@ import hashlib,json,os
 ROOT=Path(__file__).resolve().parents[1]
 def report():
  p=json.loads((ROOT/'dist/package-verification.json').read_text())
- source=ROOT/'dist/GameVoiceBox-Source-1.2.0.zip'
+ source=ROOT/'dist/GameVoiceBox-Source-1.2.1.zip'
  log=ROOT/'build/final-verification.log'
  marker=ROOT/'build/final-verification.passed'
  if not source.is_file() or not log.is_file() or not marker.is_file():
   raise RuntimeError('Fresh complete verification and source archive required')
  assets=json.loads((ROOT/'assets/integrity.json').read_text())
  if len(assets)!=14:raise RuntimeError('Full 14-clip integrity evidence required')
- installer=ROOT/'dist/GameVoiceBox-Setup-1.2.0-x64.exe'
+ installer=ROOT/'dist/GameVoiceBox-Setup-1.2.1-x64.exe'
  if hashlib.sha256(installer.read_bytes()).hexdigest()!=p['installer_sha256']:
   raise RuntimeError('Installer changed after package verification')
  review_path=ROOT/'build/review-summary.txt'
  review=review_path.read_text().strip() if review_path.is_file() else '独立审查尚未记录，不宣称审查通过。'
  lines=[
-  '开麦匣 GameVoiceBox 1.2.0：云端构建与发布验证报告',
+  '开麦匣 GameVoiceBox 1.2.1：云端构建与发布验证报告',
   '时间：'+datetime.now(timezone.utc).isoformat(timespec='seconds'),
-  'GitHub 代码提交：'+os.environ.get('SOURCE_COMMIT','发布时记录于 GitHub Release'),'',
+  '本次云端源代码快照提交：'+os.environ.get('SOURCE_COMMIT','未指定（见源代码包）'),'',
   '完整荣誉语音包：14 条；不设置任何默认全局快捷键（包括停止），只在用户填写并保存后注册。',
   '窗口内停止按钮与本窗口 Esc 可停止音效；所有语音和停止全局快捷键都可以留空。',
   '每次启动发送和试听关闭；麦克风混入发送，耳机试听仅音效。',
@@ -48,8 +48,11 @@ def report():
   'NSIS 真实解包/所有 payload 哈希/可选官方驱动/清单卸载保护新增文件。',
   '中文教程 HTML 静态结构、锚点和本地链接已检查；云浏览器加载本地页面被客户端策略阻止，未进行视觉渲染验收。',
   '', '独立代码审查：',review,'',
+  '新增托盘生命周期与实际平台适配器替身测试、安装器/指南静态回归通过；不等于 Windows 托盘或升级运行验收。',
+  '新增热键诊断的真实共享C逻辑测试通过：已注册键接收/处理/提交/拒绝计数、最近键和时间、错误保留、长度与计数上限。',
+  '诊断只保存在当前进程内存，不记录其他按键或输入内容；提交不代表已出声，尚未定位或修复游戏前台Z键失效。',
   '未执行、仍待 Windows 实机验收：',
-  '- Windows 原生界面、DPI、滚动和键盘操作',
+  '- Windows 原生界面、DPI、滚动和键盘操作、托盘/Explorer重建、桌面入口及同路径升级',
   '- 安装/卸载程序运行、UAC 取消、官方驱动安装/重启/加载',
   '- 真实麦克风隐私授权、WASAPI 录放、USB 断开和长期硬件时钟',
   '- 游戏前台可选热键、按键说话、队友收音与无回声',
@@ -65,6 +68,6 @@ def report():
   '安装包 SHA-256：'+p['installer_sha256'],
   '源码 ZIP SHA-256：'+hashlib.sha256(source.read_bytes()).hexdigest(),
  ]
- target=ROOT/'dist/GameVoiceBox-Verification-1.2.0.txt';target.write_text('\n'.join(lines)+'\n')
+ target=ROOT/'dist/GameVoiceBox-Verification-1.2.1.txt';target.write_text('\n'.join(lines)+'\n')
  print('Measured release report generated:',target)
 if __name__=='__main__':report()

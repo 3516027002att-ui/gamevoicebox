@@ -9,7 +9,7 @@ class GameVoiceBoxPackagingTest(unittest.TestCase):
  def test_new_identity_and_portable_build(self):
   make=(ROOT/'Makefile').read_text()
   self.assertIn('GameVoiceBox.exe',make)
-  self.assertIn('GameVoiceBox-Setup-1.2.0-x64.exe',make)
+  self.assertIn('GameVoiceBox-Setup-1.2.1-x64.exe',make)
   self.assertIn('TOOLS_ROOT ?= /usr',make)
   self.assertIn('installer/gamevoicebox.nsi',make)
  def test_installer_payload_excludes_original_video_and_source(self):

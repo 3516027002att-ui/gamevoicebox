@@ -6,5 +6,6 @@
 #define GAMEVOICEBOX_WINDOW_CLASS L"GameVoiceBoxWindow"
 LRESULT CALLBACK main_window_proc(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp);
 void ui_focus_visible(HWND hwnd);
+void ui_hotkey_queue_received(HWND hwnd,int id);
 void ui_apply_state(HWND hwnd,const ControllerState *state,const HotkeyStatus *hotkeys);
 #endif

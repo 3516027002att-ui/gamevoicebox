@@ -12,7 +12,7 @@ def pe_check(exe,objdump):
  assert dlls and all(d.lower() in {a.lower() for a in ALLOWED} for d in dlls),dlls
  return dlls
 def verify(sevenzip,objdump):
- installer=ROOT/'dist/GameVoiceBox-Setup-1.2.0-x64.exe';assert installer.is_file(),'Actual installer missing'
+ installer=ROOT/'dist/GameVoiceBox-Setup-1.2.1-x64.exe';assert installer.is_file(),'Actual installer missing'
  b=installer.read_bytes();assert b[:2]==b'MZ','Installer is not PE'
  target=ROOT/'build/package-extract'
  if target.exists():shutil.rmtree(target)

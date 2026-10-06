@@ -37,7 +37,7 @@ class AssetsTest(unittest.TestCase):
         catalog = json.loads(path.read_text(encoding='utf-8'))
         self.assertEqual(catalog['schema_version'], 1)
         self.assertEqual(catalog['default_stop_hotkey'], '')
-        self.assertEqual(catalog['product'], {'name': '开麦匣', 'english_name': 'GameVoiceBox', 'version': '1.2.0'})
+        self.assertEqual(catalog['product'], {'name': '开麦匣', 'english_name': 'GameVoiceBox', 'version': '1.2.1'})
         self.assertEqual([(c['id'], c['label'], c['source_filename'], c['source_sha256'], c['expected_frames']) for c in catalog['clips']], EXPECTED)
         self.assertTrue(all(c['default_hotkey'] == '' for c in catalog['clips']))
         self.assertEqual(catalog['provenance']['archive_name'], '荣誉区1.09版本.zip')

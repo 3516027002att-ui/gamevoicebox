@@ -2,7 +2,7 @@ import unittest, pathlib, tempfile, importlib.util
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 class PackageTest(unittest.TestCase):
  def test_installer_is_available(self):
-  self.assertTrue((ROOT/'dist/GameVoiceBox-Setup-1.2.0-x64.exe').is_file(),'actual installer has not been generated')
+  self.assertTrue((ROOT/'dist/GameVoiceBox-Setup-1.2.1-x64.exe').is_file(),'actual installer has not been generated')
  def test_safe_optional_driver_and_manifest_uninstall(self):
   script=(ROOT/'installer/gamevoicebox.nsi').read_text()
   helper=(ROOT/'installer/driver-page.nsh').read_text()
