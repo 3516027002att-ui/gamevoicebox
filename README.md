@@ -15,7 +15,7 @@ Windows 10 / 11 x64 的原生 C / Win32 / WASAPI 音板，提供用户语音包�
 
 ## 14 条完整语音
 
-操操操、卡了、vamos!、加纳、卡键、吞子弹了、呀嘞呀嘞、呀嘞呀嘞（缓慢版）、宽带、椅子、没办法、看小地图去了、设置、资本。
+操、卡了、vamos!、加纳、卡键、吞子弹了、呀嘞呀嘞、呀嘞呀嘞、宽带、椅子、没办法、看小地图去了、设置、资本。
 
 时长约 0.72–9.22 秒，逐条时长见教程。`assets/catalog.json` 是顺序、名称、来源、默认空白绑定及完整 PCM 帧数的唯一目录；`scripts/build_assets.py` 同时生成 `src/app/clip_catalog.h` 和 `assets/integrity.json`。前 3 条素材的解码 WAV 字节与上一版一致。
 
